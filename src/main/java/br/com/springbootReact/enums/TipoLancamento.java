@@ -1,4 +1,4 @@
-package br.com.springbootReact.model;
+package br.com.springbootReact.enums;
 
 public enum TipoLancamento {
 	
