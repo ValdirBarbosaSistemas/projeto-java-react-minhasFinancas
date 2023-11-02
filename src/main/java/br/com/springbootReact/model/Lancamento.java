@@ -46,7 +46,7 @@ public class Lancamento {
 	@Convert(converter = Jsr310JpaConverters.LocalDateConverter.class) // Convertendo a data de acordo com o do banco
 	private LocalDate dataCadastro;
 	@Column
-	@Enumerated(EnumType.STRING) // Aqui diz que o campo é do tipo enumeracao
+	@Enumerated(EnumType.STRING) // Aqui diz que o campo de enumeracao é do tipo string
 	private TipoLancamento tipo;
 	@Column
 	@Enumerated(EnumType.STRING)
