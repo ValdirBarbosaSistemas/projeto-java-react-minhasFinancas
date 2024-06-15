@@ -2,12 +2,15 @@ package br.com.springbootReact.repository;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import br.com.springbootReact.model.Usuario;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+@ExtendWith(SpringExtension.class)
 @SpringBootTest
 @ActiveProfiles("test")
 public class UsuarioRepositoryTest {
@@ -29,26 +32,40 @@ public class UsuarioRepositoryTest {
 	public void deveVerificarExistenciaDeEmail() {
 		//Em todo teste, temos que ter tres cenarios que sao: CENARIO, ACAO/EXECUCAO e VERIFICACAO
 		
-		//cenario
+		//cenario (criando um cenario para o teste)
 		Usuario usuario = Usuario.builder().nome("usuario").email("email@gmail.com").build();
 		repository.save(usuario);
 		
-		//acao/execucao
+		//acao/execucao (onde sera feita o teste)
 		boolean result = repository.existsByEmail("email@gmail.com");
 		
-		//verificacao
+		//verificacao (verifica se deu certo)
 		Assertions.assertThat(result).isTrue();//afirme que o resultado e verdadeiro
 	}
 	
 	@Test
 	public void deveRetornarFalsoQuandoNaoHouverUsuarioCadastradoComEmail() {
 		//cenario
-		repository.deleteAll();
+		//repository.deleteAll(); COM A IMPLEMENTACAO DO DataJPATest não se faz necessario remover o banco
 		
 		//acao
 		boolean result = repository.existsByEmail("email@gmail.com");
 		
 		//verificacao
 		Assertions.assertThat(result).isFalse();//afirme que o resultado e falso
+	}
+
+	@Test
+	public void devePersistirUmUsuarioNaBaseDeDados(){
+		//cenario
+		Usuario usuario = Usuario.builder()
+				.nome("UsuarioTest")
+				.email("usuario@email.com")
+				.senha("123")
+				.build();
+		//acao
+		Usuario usuarioSalvar = repository.save(usuario);
+		//verificacao
+		Assertions.assertThat(usuarioSalvar.getId()).isNotNull();
 	}
 }

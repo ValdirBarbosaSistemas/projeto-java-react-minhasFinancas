@@ -1,17 +1,17 @@
 package br.com.springbootReact.service;
 
+import br.com.springbootReact.exceptions.RegraDeNegocioException;
+import br.com.springbootReact.model.Usuario;
+import br.com.springbootReact.repository.UsuarioRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.ActiveProfiles;
-
-import br.com.springbootReact.exceptions.RegraDeNegocioException;
-import br.com.springbootReact.model.Usuario;
-import br.com.springbootReact.repository.UsuarioRepository;
 
 //@SpringBootTest
 @ActiveProfiles("test")
@@ -35,8 +35,10 @@ public class UsuarioServiceTest {
 	@Test()
 	public void deveValidarEmail() {
 		// cenario
-		//repository.deleteAll();
+		//repository.deleteAll(); COM A IMPLEMENTACAO DO DataJPATest não se faz necessario remover o banco
 
+		//Utilizando MOCK
+		UsuarioRepository usuarioRepositoryMock = Mockito.mock(UsuarioRepository.class);
 		// acao
 		service.validarEmail("email@email.com");
 	}
@@ -52,21 +54,5 @@ public class UsuarioServiceTest {
 		Assertions.assertThrows(RegraDeNegocioException.class, () -> {
 			service.validarEmail("testeemail@gmail.com");
 		});
-	}
-	
-	@Test
-	public void devePersistirUmUsuarioNaBaseDeDados() {
-		//cenario
-		Usuario usuario = Usuario
-				.builder()
-				.nome("teste2")
-				.email("teste@email.com")
-				.senha("123")
-				.build();
-		
-		//acao
-		Usuario usuarioSalvo = repository.save(usuario);
-		
-		org.assertj.core.api.Assertions.assertThat(usuarioSalvo.getId()).isNotNull();
 	}
 }
